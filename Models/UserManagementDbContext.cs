@@ -37,8 +37,15 @@ public class UserManagementDbContext : DbContext
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = utcNow;
-                entry.Entity.UpdatedAt = utcNow;
+                if (entry.Entity.CreatedAt == default)
+                {
+                    entry.Entity.CreatedAt = utcNow;
+                }
+
+                if (entry.Entity.UpdatedAt == default)
+                {
+                    entry.Entity.UpdatedAt = utcNow;
+                }
             }
 
             if (entry.State == EntityState.Modified)

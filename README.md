@@ -89,21 +89,28 @@ This command provisions the `db` PostgreSQL instance and the API container. Insp
   dotnet swagger tofile --output ./swagger.json bin/Debug/net9.0/UserManagement.dll v1
   ```
 
+### Seed Data
+- On application startup the `Data/DatabaseSeeder.cs` helper inserts five representative users the first time the database is empty.
+- The seeded records cover active/inactive scenarios and a few global regions so the UI has meaningful data immediately.
+- Running against an existing database leaves your data untouched; the seeder only executes when no user rows exist.
+
+### REST Request Examples
+- The `UserManagement.http` scratch file now targets the Users API with ready-to-run GET/POST/PUT/DELETE examples.
+- Adjust the `@baseAddress` and `@userId` variables at the top of the file to suit your local environment.
+- Alternatively translate the examples into `curl` or your preferred API client.
+
 ### TypeScript Client Generation
-With the OpenAPI document available (`swagger.json`), generate a TypeScript client using open-source tooling:
-
-```bash
-# install the generator once
-npm install -g @openapitools/openapi-generator-cli
-
-# generate a fetch-based client into ./clients/typescript
-openapi-generator-cli generate \
-  -i swagger.json \
-  -g typescript-fetch \
-  -o clients/typescript
-```
-
-Commit the generated client only if you plan to publish it; otherwise treat it as a build artifact.
+- Restore the local `dotnet` tools manifest (installs `swashbuckle.aspnetcore.cli`):
+  ```bash
+  dotnet tool restore
+  ```
+- Generate the OpenAPI document and a TypeScript Fetch client in one step:
+  ```bash
+  nu scripts/generate-typescript-client.nu
+  ```
+- The script emits `artifacts/swagger.json` and writes the generated client into `clients/typescript` (overwriting the folder each run).
+- Install [`npx`](https://docs.npmjs.com/cli/v10/commands/npx) or have `@openapitools/openapi-generator-cli` globally available; the script shells out to it under the hood.
+- Treat the generated client as disposable build output unless you explicitly want it source-controlled.
 
 ## Testing
 - Prepare unit tests under a `tests/` directory using xUnit or NUnit.

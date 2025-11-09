@@ -1,6 +1,41 @@
-@UserManagement_HostAddress = http://localhost:5206
+@baseAddress = https://localhost:5001
 
-GET {{UserManagement_HostAddress}}/weatherforecast/
+### List users
+GET {{baseAddress}}/api/users
 Accept: application/json
 
-###
+### Retrieve a single user
+@userId = 8c48ce8e-9650-4dc5-ae2c-237635b38767
+GET {{baseAddress}}/api/users/{{userId}}
+Accept: application/json
+
+### Create a user
+POST {{baseAddress}}/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+	"firstName": "Jamie",
+	"lastName": "Rivera",
+	"email": "jamie.rivera@example.com",
+	"phoneNumber": "+1-646-555-0172",
+	"notes": "Requested early access to the new analytics dashboard"
+}
+
+### Update a user
+PUT {{baseAddress}}/api/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+	"firstName": "Alex",
+	"lastName": "Johnson",
+	"email": "alex.johnson@example.com",
+	"phoneNumber": "+1-404-555-0100",
+	"notes": "Promoted to solutions architect in Q3",
+	"isActive": true
+}
+
+### Delete a user
+DELETE {{baseAddress}}/api/users/{{userId}}
+Accept: application/json
